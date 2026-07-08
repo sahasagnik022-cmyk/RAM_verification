@@ -29,7 +29,6 @@ class ram_generator;
         end
     endtask
 
-    // Sequence 2: Just Reads
     task read_sequence(int count);
         for(int i=0; i<count; i++) begin
             blueprint = new();
@@ -37,8 +36,6 @@ class ram_generator;
             mbx.put(blueprint);
         end
     endtask
-
-    // Sequence 3: Hold State (00)
     task hold_sequence(int count);
         for(int i=0; i<count; i++) begin
             blueprint = new();
