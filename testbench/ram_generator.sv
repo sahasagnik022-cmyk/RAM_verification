@@ -16,9 +16,34 @@ class ram_generator;
         $finish;
       end
       mbx.put(drv_tx);
-      $display("[%0t] [GEN] Created Tx %0d | W=%0b R=%0b | Addr=%0d | DataIn=%0d", 
+      $display("[%0t] [GEN] Created Tx %0d | W=%0b R=%0b | Addr=%0d | DataIn=%0d",
                      $time,i,drv_tx.write_enb,drv_tx.read_enb,drv_tx.address,drv_tx.data_in);
     end
     $display("[%0t] [GEN] Generator Finished. Created %0d transactions.", $time, num_transactions);
   endtask
+    task write_sequence(int count);
+        for(int i=0; i<count; i++) begin
+            blueprint = new();
+            blueprint.randomize() with { write_enb == 1; read_enb == 0; };
+            mbx.put(blueprint);
+        end
+    endtask
+
+    // Sequence 2: Just Reads
+    task read_sequence(int count);
+        for(int i=0; i<count; i++) begin
+            blueprint = new();
+            blueprint.randomize() with { write_enb == 0; read_enb == 1; };
+            mbx.put(blueprint);
+        end
+    endtask
+
+    // Sequence 3: Hold State (00)
+    task hold_sequence(int count);
+        for(int i=0; i<count; i++) begin
+            blueprint = new();
+            blueprint.randomize() with { write_enb == 0; read_enb == 0; };
+            mbx.put(blueprint);
+        end
+    endtask
 endclass
